@@ -12,6 +12,10 @@ group = project.maven_group
 
 repositories {
 	jcenter()
+	maven {
+		name = "CottonMC"
+		url = "https://server.bbkr.space/artifactory/libs-release"
+	}
 }
 
 dependencies {

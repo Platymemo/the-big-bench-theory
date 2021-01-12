@@ -179,31 +179,30 @@ public class MegaShapedRecipe implements MegaRecipe {
 
     private static int findNextIngredient(String pattern) {
         int i;
-        for(i = 0; i < pattern.length() && pattern.charAt(i) == ' '; ++i) {
-        }
+
+        for(i = 0; i < pattern.length() && pattern.charAt(i) == ' '; ++i) { }
 
         return i;
     }
 
     private static int findNextIngredientReverse(String pattern) {
         int i;
-        for(i = pattern.length() - 1; i >= 0 && pattern.charAt(i) == ' '; --i) {
-        }
+        for(i = pattern.length() - 1; i >= 0 && pattern.charAt(i) == ' '; --i) { }
 
         return i;
     }
 
     private static String[] getPattern(JsonArray json) {
         String[] strings = new String[json.size()];
-        if (strings.length > 3) {
-            throw new JsonSyntaxException("Invalid pattern: too many rows, 3 is maximum");
+        if (strings.length > 9) {
+            throw new JsonSyntaxException("Invalid pattern: too many rows, 9 is maximum");
         } else if (strings.length == 0) {
             throw new JsonSyntaxException("Invalid pattern: empty pattern not allowed");
         } else {
             for(int i = 0; i < strings.length; ++i) {
                 String string = JsonHelper.asString(json.get(i), "pattern[" + i + "]");
-                if (string.length() > 3) {
-                    throw new JsonSyntaxException("Invalid pattern: too many columns, 3 is maximum");
+                if (string.length() > 9) {
+                    throw new JsonSyntaxException("Invalid pattern: too many columns, 9 is maximum");
                 }
 
                 if (i > 0 && strings[0].length() != string.length()) {

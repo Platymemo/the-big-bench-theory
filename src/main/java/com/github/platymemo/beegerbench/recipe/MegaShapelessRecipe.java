@@ -4,7 +4,6 @@ import com.github.platymemo.beegerbench.BeegerBench;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.inventory.CraftingInventory;
@@ -62,7 +61,7 @@ public class MegaShapelessRecipe implements MegaRecipe{
             }
         }
 
-        return i == this.input.size() && recipeFinder.findRecipe(this, (IntList)null);
+        return i == this.input.size() && recipeFinder.findRecipe(this, null);
     }
 
     public ItemStack craft(CraftingInventory craftingInventory) {

@@ -1,7 +1,7 @@
 package com.github.platymemo.beegerbench.screen;
 
 import com.github.platymemo.beegerbench.BeegerBench;
-import com.github.platymemo.beegerbench.MegaInputSlotRecipeFiller;
+import com.github.platymemo.beegerbench.recipe.MegaInputSlotRecipeFiller;
 import com.github.platymemo.beegerbench.recipe.MegaRecipe;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -27,8 +27,8 @@ public class MegaCraftingScreenHandler extends AbstractRecipeScreenHandler<Craft
     private static final int MAX_TABLE_SIZE = 9;
     private final CraftingInventory input;
     private final CraftingResultInventory result;
-    private final ScreenHandlerContext context;
-    private final PlayerEntity player;
+    public final ScreenHandlerContext context;
+    public final PlayerEntity player;
 
     public MegaCraftingScreenHandler(int syncId, PlayerInventory playerInventory) {
         this(syncId, playerInventory, ScreenHandlerContext.EMPTY);
@@ -188,7 +188,7 @@ public class MegaCraftingScreenHandler extends AbstractRecipeScreenHandler<Craft
 
     @Environment(EnvType.CLIENT)
     public int getCraftingSlotCount() {
-        return 82;
+        return this.input.size() + this.result.size();
     }
 
     @Environment(EnvType.CLIENT)

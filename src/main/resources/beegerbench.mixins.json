@@ -1,12 +1,11 @@
 {
-  "required": true,
+  "required": false,
   "minVersion": "0.8",
   "package": "com.github.platymemo.beegerbench.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [
-    "ShapedRecipeMixin"
+  "mixins": [],
+  "client": [
+    "client.ClientRecipeBookMixin"
   ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+  "injectors": {}
 }

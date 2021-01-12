@@ -1,4 +1,4 @@
-package com.github.platymemo.beegerbench;
+package com.github.platymemo.beegerbench.recipe;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -7,6 +7,8 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeFinder;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
+import net.minecraft.screen.CraftingScreenHandler;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.MathHelper;
 
@@ -15,6 +17,17 @@ import java.util.Iterator;
 public class MegaInputSlotRecipeFiller<C extends Inventory> extends InputSlotFiller<C> {
     public MegaInputSlotRecipeFiller(AbstractRecipeScreenHandler<C> abstractRecipeScreenHandler) {
         super(abstractRecipeScreenHandler);
+    }
+
+    @Override
+    protected void returnInputs() {
+        for(int i = 1; i < this.craftingScreenHandler.getCraftingWidth() * this.craftingScreenHandler.getCraftingHeight() + 1; ++i) {
+            if (!(this.craftingScreenHandler instanceof PlayerScreenHandler)) {
+                this.returnSlot(i);
+            }
+        }
+
+        this.craftingScreenHandler.clearCraftingSlots();
     }
 
     @Override

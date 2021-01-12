@@ -27,7 +27,7 @@ public class MegaCraftingScreen extends HandledScreen<MegaCraftingScreenHandler>
         super.init();
         this.backgroundWidth = 256;
         this.backgroundHeight = 256;
-        this.narrow = this.width < this.backgroundWidth + 256 || this.height < this.backgroundHeight + 256;
+        this.narrow = this.width < this.backgroundWidth + 80;
         this.recipeBook.initialize(this.width - 80, this.height, this.client, this.narrow, this.handler);
         this.x = this.recipeBook.findLeftEdge(this.narrow, this.width, this.backgroundWidth);
         this.children.add(this.recipeBook);
@@ -38,8 +38,6 @@ public class MegaCraftingScreen extends HandledScreen<MegaCraftingScreenHandler>
             this.x = this.recipeBook.findLeftEdge(this.narrow, this.width, this.backgroundWidth);
             ((TexturedButtonWidget)buttonWidget).setPos(this.x + this.backgroundWidth - 45, this.height / 2);
         }));
-        this.titleX = 5;
-        this.titleY = -41;
     }
 
     public void tick() {

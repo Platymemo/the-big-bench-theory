@@ -23,6 +23,12 @@
     ],
     "client": [
       "com.github.platymemo.beegerbench.BeegerBenchClient"
+    ],
+    "rei_containers": [
+      "com.github.platymemo.beegerbench.rei.MegaCraftingContainerPlugin"
+    ],
+    "rei_plugins": [
+      "com.github.platymemo.beegerbench.rei.MegaCraftingPlugin"
     ]
   },
   "mixins": [

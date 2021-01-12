@@ -14,6 +14,6 @@ public interface MegaRecipe extends Recipe<CraftingInventory> {
         private Type() {}
         public static final Type INSTANCE = new Type();
 
-        public static final String ID = "cutting_board_recipe";
+        public static final String ID = "mega_crafting";
     }
 }
