@@ -16,7 +16,6 @@ import net.minecraft.recipe.*;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.slot.CraftingResultSlot;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
@@ -40,7 +39,7 @@ public class MegaCraftingScreenHandler extends AbstractRecipeScreenHandler<Craft
         this.result = new CraftingResultInventory();
         this.context = context;
         this.player = playerInventory.player;
-        this.addSlot(new CraftingResultSlot(playerInventory.player, this.input, this.result, 0, 227, 32));
+        this.addSlot(new MegaCraftingResultSlot(playerInventory.player, this.input, this.result, 0, 227, 32));
 
         int m;
         int l;
