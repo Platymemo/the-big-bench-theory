@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "bigbenchtheory:block/biggest_bench_front",
+    "north": "bigbenchtheory:block/biggest_bench_front",
+    "south": "bigbenchtheory:block/biggest_bench_side",
+    "east": "bigbenchtheory:block/biggest_bench_side",
+    "west": "bigbenchtheory:block/biggest_bench_front",
+    "up": "bigbenchtheory:block/biggest_bench_top",
+    "down": "minecraft:block/netherite_block"
+  }
+}

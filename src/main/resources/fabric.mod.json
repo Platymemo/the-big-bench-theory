@@ -1,38 +1,42 @@
 {
   "schemaVersion": 1,
-  "id": "beegerbench",
+  "id": "bigbenchtheory",
   "version": "${version}",
 
-  "name": "Beeger Bench",
-  "description": "This mod adds a bigger crafting table, intended for modpack developers to make new recipes.",
+  "name": "The Big Bench Theory",
+  "description": "I like big benches and I cannot lie.\nAdds new crafting tables of varying sizes.",
   "authors": [
     "Platymemo"
   ],
   "contact": {
-    "homepage": "https://github.com/Platymemo/beeger-bench",
-    "sources": "https://github.com/Platymemo/beeger-bench"
+    "homepage": "https://github.com/Platymemo/the-big-bench-theory",
+    "sources": "https://github.com/Platymemo/the-big-bench-theory",
+    "issues": "https://github.com/Platymemo/the-big-bench-theory/issues"
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/beegerbench/icon.png",
+  "icon": "assets/bigbenchtheory/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.github.platymemo.beegerbench.BeegerBench"
+      "com.github.platymemo.bigbenchtheory.BigBenchTheory"
     ],
     "client": [
-      "com.github.platymemo.beegerbench.BeegerBenchClient"
+      "com.github.platymemo.bigbenchtheory.BigBenchTheoryClient"
     ],
     "rei_containers": [
-      "com.github.platymemo.beegerbench.rei.MegaCraftingContainerPlugin"
+      "com.github.platymemo.bigbenchtheory.compat.rei.MegaCraftingContainerPlugin"
     ],
     "rei_plugins": [
-      "com.github.platymemo.beegerbench.rei.MegaCraftingPlugin"
+      "com.github.platymemo.bigbenchtheory.compat.rei.MegaCraftingPlugin"
+    ],
+    "kubejs-init": [
+      "com.github.platymemo.bigbenchtheory.compat.kubejs.BigBenchKubeJS"
     ]
   },
   "mixins": [
-    "beegerbench.mixins.json"
+    "bigbenchtheory.mixins.json"
   ],
 
   "depends": {

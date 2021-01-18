@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "bigbenchtheory:block/big_bench"
+    }
+  }
+}

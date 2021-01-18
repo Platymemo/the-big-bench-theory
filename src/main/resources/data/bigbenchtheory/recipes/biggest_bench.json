@@ -1,0 +1,23 @@
+{
+  "type": "bigbenchtheory:crafting_shaped",
+  "pattern": [
+    "#######",
+    "#######",
+    "#######",
+    "###N###",
+    "#######",
+    "#######",
+    "#######"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:crafting_table"
+    },
+    "N": {
+      "item": "minecraft:netherite_block"
+    }
+  },
+  "result": {
+    "item": "bigbenchtheory:biggest_bench"
+  }
+}

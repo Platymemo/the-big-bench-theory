@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "bigbenchtheory:block/bigger_bench_front",
+    "north": "bigbenchtheory:block/bigger_bench_front",
+    "south": "bigbenchtheory:block/bigger_bench_side",
+    "east": "bigbenchtheory:block/bigger_bench_side",
+    "west": "bigbenchtheory:block/bigger_bench_front",
+    "up": "bigbenchtheory:block/bigger_bench_top",
+    "down": "minecraft:block/diamond_block"
+  }
+}

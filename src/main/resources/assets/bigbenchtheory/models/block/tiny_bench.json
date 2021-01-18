@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/crafting_table_front",
+    "north": "minecraft:block/crafting_table_front",
+    "south": "minecraft:block/crafting_table_side",
+    "east": "minecraft:block/crafting_table_side",
+    "west": "minecraft:block/crafting_table_front",
+    "up": "bigbenchtheory:block/tiny_bench_top",
+    "down": "minecraft:block/netherite_block"
+  },
+  "elements": [
+    {
+      "from": [4, 0, 4],
+      "to": [12, 8, 12],
+      "faces": {
+        "north": {"uv": [0, 0, 16, 16], "texture": "#north"},
+        "east": {"uv": [0, 0, 16, 16], "texture": "#south"},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#east"},
+        "west": {"uv": [0, 0, 16, 16], "texture": "#west"},
+        "up": {"uv": [0, 0, 16, 16], "texture": "#up"},
+        "down": {"uv": [0, 0, 16, 16], "texture": "#down"}
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "bigbenchtheory:crafting_shaped",
+  "pattern": [
+    "#####",
+    "#####",
+    "##D##",
+    "#####",
+    "#####"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:crafting_table"
+    },
+    "D": {
+      "item": "minecraft:diamond_block"
+    }
+  },
+  "result": {
+    "item": "bigbenchtheory:bigger_bench"
+  }
+}

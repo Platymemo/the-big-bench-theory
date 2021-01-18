@@ -1,0 +1,19 @@
+{
+  "type": "bigbenchtheory:crafting_shaped",
+  "pattern": [
+    "###",
+    "#I#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:crafting_table"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    }
+  },
+  "result": {
+    "item": "bigbenchtheory:big_bench"
+  }
+}

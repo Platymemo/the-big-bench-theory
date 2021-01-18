@@ -1,0 +1,15 @@
+{
+  "type": "bigbenchtheory:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:wooden_buttons"
+    }
+  },
+  "result": {
+    "item": "bigbenchtheory:tiny_bench"
+  }
+}

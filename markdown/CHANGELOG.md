@@ -1,0 +1,7 @@
+### v1.0.0
+1. 1x1 Tiny Crafting Table
+2. 5x5 Greater Crafting Table
+3. 7x7 Massive Crafting Table
+4. 9x9 Ultimate Crafting Table
+5. REI compatibility
+6. KubeJS compatibility

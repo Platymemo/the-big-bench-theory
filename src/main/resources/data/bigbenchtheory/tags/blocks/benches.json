@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "bigbenchtheory:tiny_bench",
+    "bigbenchtheory:biggest_bench",
+    "bigbenchtheory:bigger_bench",
+    "bigbenchtheory:big_bench"
+  ]
+}

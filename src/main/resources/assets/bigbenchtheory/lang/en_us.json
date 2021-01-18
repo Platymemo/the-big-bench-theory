@@ -1,0 +1,12 @@
+{
+  "container.tinycrafting": "§oCrafting§r",
+  "container.greatercrafting": "Greater Crafting",
+  "container.massivecrafting": "Massive Crafting",
+
+  "category.bigbenchtheory.mega_crafting": "Mega Crafting",
+
+  "block.bigbenchtheory.tiny_bench": "Tiny Crafting Table",
+  "block.bigbenchtheory.big_bench": "Greater Crafting Table",
+  "block.bigbenchtheory.bigger_bench": "Massive Crafting Table",
+  "block.bigbenchtheory.biggest_bench": "Ultimate Crafting Table"
+}
