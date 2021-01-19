@@ -9,7 +9,7 @@
   ],
   "key": {
     "#": {
-      "tag": "c:crafting_table"
+      "tag": "c:crafting_tables"
     },
     "D": {
       "item": "minecraft:diamond_block"

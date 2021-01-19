@@ -3,7 +3,9 @@ package com.github.platymemo.bigbenchtheory;
 import com.github.platymemo.bigbenchtheory.registry.BigBenchScreenHandlerRegistry;
 import com.github.platymemo.bigbenchtheory.screen.BigBenchCraftingScreen;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
+import net.minecraft.client.MinecraftClient;
 
 public class BigBenchTheoryClient implements ClientModInitializer {
 

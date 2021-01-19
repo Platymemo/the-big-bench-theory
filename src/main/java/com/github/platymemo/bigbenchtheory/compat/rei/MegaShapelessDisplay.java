@@ -54,6 +54,6 @@ public class MegaShapelessDisplay implements MegaCraftingDisplay{
 
     @Override
     public int getHeight() {
-        return display.getPreviewInputs().size() / getWidth();
+        return MathHelper.ceil((double) display.getPreviewInputs().size() / getWidth());
     }
 }

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:crafting_table",
+    "bigbenchtheory:tiny_bench",
+    "bigbenchtheory:big_bench",
+    "bigbenchtheory:bigger_bench",
+    "bigbenchtheory:biggest_bench"
+  ]
+}

@@ -7,7 +7,7 @@
   ],
   "key": {
     "#": {
-      "tag": "c:crafting_table"
+      "tag": "c:crafting_tables"
     },
     "I": {
       "item": "minecraft:iron_block"

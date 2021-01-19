@@ -84,7 +84,7 @@ public class MegaShapelessRecipe implements MegaRecipe{
             DefaultedList<Ingredient> defaultedList = getIngredients(JsonHelper.getArray(jsonObject, "ingredients"));
             if (defaultedList.isEmpty()) {
                 throw new JsonParseException("No ingredients for shapeless recipe");
-            } else if (defaultedList.size() > 9) {
+            } else if (defaultedList.size() > 81) {
                 throw new JsonParseException("Too many ingredients for shapeless recipe");
             } else {
                 ItemStack itemStack = ShapedRecipe.getItemStack(JsonHelper.getObject(jsonObject, "result"));
