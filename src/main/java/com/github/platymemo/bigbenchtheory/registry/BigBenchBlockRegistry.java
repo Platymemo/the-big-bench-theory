@@ -4,6 +4,7 @@ import com.github.platymemo.bigbenchtheory.BigBenchTheory;
 import com.github.platymemo.bigbenchtheory.block.BigBenchBlock;
 import com.github.platymemo.bigbenchtheory.block.TinyBenchBlock;
 import com.github.platymemo.bigbenchtheory.util.BenchSize;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
@@ -31,7 +32,8 @@ public class BigBenchBlockRegistry {
     public static final Block BIGGER_BENCH = add("bigger_bench", new BigBenchBlock(
             FabricBlockSettings.of(Material.METAL, MaterialColor.DIAMOND).requiresTool().strength(5.0F, 6.0F).sounds(BlockSoundGroup.METAL), BenchSize.BIGGER), ItemGroup.DECORATIONS);
     public static final Block BIGGEST_BENCH = add("biggest_bench", new BigBenchBlock(
-            FabricBlockSettings.of(Material.METAL, MaterialColor.BLACK).requiresTool().strength(50.0F, 1200.0F).sounds(BlockSoundGroup.NETHERITE), BenchSize.BIGGEST), ItemGroup.DECORATIONS);
+            FabricBlockSettings.of(Material.METAL, MaterialColor.BLACK).requiresTool().strength(50.0F, 1200.0F).sounds(BlockSoundGroup.NETHERITE), BenchSize.BIGGEST), ItemGroup.DECORATIONS,
+            new FabricItemSettings().fireproof());
 
     private static <B extends Block> B add(String name, B block, ItemGroup tab) {
         Item.Settings settings = new Item.Settings();
@@ -39,6 +41,13 @@ public class BigBenchBlockRegistry {
             settings.group(tab);
         }
         return add(name, block, new BlockItem(block, settings));
+    }
+
+    private static <B extends Block> B add(String name, B block, ItemGroup tab, Item.Settings itemSettings) {
+        if (tab != null) {
+            itemSettings.group(tab);
+        }
+        return add(name, block, new BlockItem(block, itemSettings));
     }
 
     private static <B extends Block> B add(String name, B block, BlockItem item) {

@@ -11,7 +11,7 @@ events.listen('recipes', event => {
       S: 'minecraft:sponge'
   })
 
-  event.shapeless(item.of('minecraft:cobblestone', 4),
+  event.recipes.bigbenchtheory.crafting_shapeless(item.of('minecraft:cobblestone', 4),
       ['minecraft:stone',
        'minecraft:stone',
        'minecraft:stone',
