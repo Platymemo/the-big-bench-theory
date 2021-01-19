@@ -29,5 +29,7 @@ Most likely though, modded crafting tables will work too.
     * Currently, all modded recipes take up the space a 9x9 takes. This is subject to change.
 2. KubeJS Integration [Examples](markdown/kubejs_examples.md)
     * What kind of crafting table and recipe mod would this be without KubeJS?
-3. Other Mods' Crafting Tables
+3. Full NBT Crafting Integration
+    * Including support for dollars.
+4. Other Mods' Crafting Tables
     * Most modded crafting tables should work fine. Make an issue on the github if there's an incompatibility please.
