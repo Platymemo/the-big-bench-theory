@@ -52,9 +52,8 @@ dependencies {
     modImplementation "de.siphalor:nbtcrafting-1.16:2+"
 
     // KubeJS Integration
-    // since this was like the only way to get it to work.
-    modImplementation "com.github.Technici4n:KubeJS-Fabric:${project.kubejs_commit}"
-    include "com.github.Technici4n:KubeJS-Fabric:${project.kubejs_commit}"
+    modImplementation "curse.maven:kubejs-${project.kubejs_project}:${project.kubejs_file}"
+	modImplementation "curse.maven:architectury-api-${project.architectury_project}:${project.architectury_file}"
 }
 
 processResources {
