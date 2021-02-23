@@ -78,16 +78,6 @@ public class BigBenchBlockRegistry {
         for (Identifier id : BLOCKS.keySet()) {
             Registry.register(Registry.BLOCK, id, BLOCKS.get(id));
         }
-        addFuels();
-        addFlammables();
-    }
-
-    private static void addFuels() {
-        FuelRegistry fuelRegistry = FuelRegistry.INSTANCE;
-    }
-
-    private static void addFlammables() {
-        FlammableBlockRegistry flammableRegistry = FlammableBlockRegistry.getDefaultInstance();
     }
 
     public static Map<Identifier, Block> getBlocks() {

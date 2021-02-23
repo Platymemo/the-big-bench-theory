@@ -16,6 +16,5 @@ public class BigBenchTagRegistry {
     public static final Tag<Item> CRAFTING_TABLES = TagRegistry.item(new Identifier("c", "crafting_tables"));
 
     public static void register() {
-        BigBenchTheory.LOGGER.info("Initializing tags");
     }
 }
