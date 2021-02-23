@@ -13,16 +13,10 @@ group = project.maven_group
 repositories {
     jcenter()
     maven {
-        name = "CottonMC"
-        url = "https://server.bbkr.space/artifactory/libs-release"
+        url = "https://maven.terraformersmc.com/releases"
     }
     maven {
-        name "Jitpack"
-        url "https://jitpack.io"
-        content {
-            includeGroup "com.github.KubeJS-Mods"
-            includeGroup "com.github.Technici4n"
-        }
+        url = "https://maven.shedaniel.me"
     }
     maven {
         name "Siphalor's Maven"
@@ -43,7 +37,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // Mod Menu integration
-    modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
     // REI integration
     modImplementation "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"

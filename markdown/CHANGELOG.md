@@ -13,3 +13,7 @@
     * (Originally could only take the vanilla 9)
 4. Fixed the algorithm to generate REI displays for Shapeless Recipes to account for all 1-81 possible input sizes
     * (Originally would crash on some input sizes with an `array out of bounds` error)
+   
+### v1.0.2
+1. Fixed KubeJS Compatibility (Again) \
+   Thanks to liketechnik for the PR!
