@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.recipebook.RecipeBookProvider;
 import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.slot.Slot;
@@ -22,7 +23,7 @@ public class BigBenchCraftingScreen extends HandledScreen<AbstractBigBenchCrafti
             new Identifier(BigBenchTheory.MOD_ID, "textures/gui/container/bigger_bench.png"),
             new Identifier(BigBenchTheory.MOD_ID, "textures/gui/container/biggest_bench.png")};
     private static final Identifier RECIPE_BUTTON_TEXTURE = new Identifier("textures/gui/recipe_button.png");
-    private ScreenPlacementHelper placementHelper;
+    private final ScreenPlacementHelper placementHelper;
     private final RecipeBookWidget recipeBook = new RecipeBookWidget();
     private boolean narrow;
 
@@ -37,23 +38,24 @@ public class BigBenchCraftingScreen extends HandledScreen<AbstractBigBenchCrafti
         super.init();
         this.narrow = this.width < this.backgroundWidth + 204;
         this.recipeBook.initialize(placementHelper.getRecipeBookWidth(width), this.height, this.client, this.narrow, this.handler);
-        this.x = this.recipeBook.findLeftEdge(this.narrow, this.width, this.backgroundWidth);
-        this.children.add(this.recipeBook);
-        this.setInitialFocus(this.recipeBook);
-        this.addButton(new TexturedButtonWidget(placementHelper.getRecipeBookX(x), placementHelper.getRecipeBookY(this.height), 20, 18, 0, 0, 19, RECIPE_BUTTON_TEXTURE, (buttonWidget) -> {
-            this.recipeBook.reset(this.narrow);
+        this.x = this.recipeBook.findLeftEdge(this.width, this.backgroundWidth);
+        this.addDrawable(new TexturedButtonWidget(placementHelper.getRecipeBookX(x), placementHelper.getRecipeBookY(this.height), 20, 18, 0, 0, 19, RECIPE_BUTTON_TEXTURE, (buttonWidget) -> {
+            this.recipeBook.reset();
             this.recipeBook.toggleOpen();
-            this.x = this.recipeBook.findLeftEdge(this.narrow, this.width, this.backgroundWidth);
+            this.x = this.recipeBook.findLeftEdge(this.width, this.backgroundWidth);
             ((TexturedButtonWidget)buttonWidget).setPos(placementHelper.getRecipeBookX(x), placementHelper.getRecipeBookY(this.height));
         }));
+        this.addSelectableChild(this.recipeBook);
+        this.setInitialFocus(this.recipeBook);
         this.titleX = this.placementHelper.getTitleX();
         this.titleY = this.placementHelper.getTitleY();
         this.playerInventoryTitleX = this.placementHelper.getPlayerInventoryTitleX();
         this.playerInventoryTitleY = this.placementHelper.getPlayerInventoryTitleY();
     }
 
-    public void tick() {
-        super.tick();
+    @Override
+    public void handledScreenTick() {
+        super.handledScreenTick();
         this.recipeBook.update();
     }
 
@@ -73,8 +75,9 @@ public class BigBenchCraftingScreen extends HandledScreen<AbstractBigBenchCrafti
     }
 
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.client.getTextureManager().bindTexture(TEXTURES[this.placementHelper.getOrder()]);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, TEXTURES[this.placementHelper.getOrder()]);
         int i = this.x;
         int j = (this.height - this.backgroundHeight) / 2;
         this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);

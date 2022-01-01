@@ -247,7 +247,7 @@ public class MegaShapedRecipe implements MegaRecipe {
             int i = strings[0].length();
             int j = strings.length;
             DefaultedList<Ingredient> defaultedList = MegaShapedRecipe.getIngredients(strings, map, i, j);
-            ItemStack itemStack = ShapedRecipe.getItemStack(JsonHelper.getObject(jsonObject, "result"));
+            ItemStack itemStack = ShapedRecipe.outputFromJson(JsonHelper.getObject(jsonObject, "result"));
             return new MegaShapedRecipe(identifier, string, i, j, defaultedList, itemStack);
         }
 

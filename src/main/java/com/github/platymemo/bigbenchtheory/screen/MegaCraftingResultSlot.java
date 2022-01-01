@@ -54,12 +54,14 @@ public class MegaCraftingResultSlot extends Slot {
         this.amount = 0;
     }
 
-    public ItemStack onTakeItem(PlayerEntity player, ItemStack stack) {
+    public void onTakeItem(PlayerEntity player, ItemStack stack) {
         this.onCrafted(stack);
 
-        DefaultedList<ItemStack> defaultedList = player.world.getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, this.input, player.world);
-        if (!defaultedList.equals(DefaultedList.ofSize(input.size(), ItemStack.EMPTY))) {
+        DefaultedList<ItemStack> defaultedList;
+        if (player.world.getRecipeManager().getFirstMatch(BigBenchTheory.MEGA_RECIPE, this.input, player.world).isPresent()) {
             defaultedList = player.world.getRecipeManager().getRemainingStacks(BigBenchTheory.MEGA_RECIPE, this.input, player.world);
+        } else {
+            defaultedList = player.world.getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, this.input, player.world);
         }
 
         for(int i = 0; i < defaultedList.size(); ++i) {
@@ -73,15 +75,13 @@ public class MegaCraftingResultSlot extends Slot {
             if (!itemStack2.isEmpty()) {
                 if (itemStack.isEmpty()) {
                     this.input.setStack(i, itemStack2);
-                } else if (ItemStack.areItemsEqualIgnoreDamage(itemStack, itemStack2) && ItemStack.areTagsEqual(itemStack, itemStack2)) {
+                } else if (ItemStack.areItemsEqualIgnoreDamage(itemStack, itemStack2) && ItemStack.areNbtEqual(itemStack, itemStack2)) {
                     itemStack2.increment(itemStack.getCount());
                     this.input.setStack(i, itemStack2);
-                } else if (!this.player.inventory.insertStack(itemStack2)) {
+                } else if (!this.player.getInventory().insertStack(itemStack2)) {
                     this.player.dropItem(itemStack2, false);
                 }
             }
         }
-
-        return stack;
     }
 }

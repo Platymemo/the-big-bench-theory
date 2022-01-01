@@ -33,12 +33,10 @@ public abstract class RecipeBookWidgetMixin extends DrawableHelper implements Dr
     public void alignRecipeToGrid(int gridWidth, int gridHeight, int gridOutputSlot, Recipe<?> recipe, Iterator<Ingredient> inputs, int amount) {
         int recipeWidth = gridWidth;
         int recipeHeight = gridHeight;
-        if (recipe instanceof ShapedRecipe) {
-            ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
+        if (recipe instanceof ShapedRecipe shapedRecipe) {
             recipeWidth = shapedRecipe.getWidth();
             recipeHeight = shapedRecipe.getHeight();
-        } else if (recipe instanceof MegaShapedRecipe) {
-            MegaShapedRecipe shapedRecipe = (MegaShapedRecipe) recipe;
+        } else if (recipe instanceof MegaShapedRecipe shapedRecipe) {
             recipeWidth = shapedRecipe.getWidth();
             recipeHeight = shapedRecipe.getHeight();
         }
@@ -56,16 +54,8 @@ public abstract class RecipeBookWidgetMixin extends DrawableHelper implements Dr
                     break;
                 }
 
-                this.acceptAlignedInput(inputs, amount, currWidth, currHeight);
+                this.acceptAlignedInput(inputs, 1 + currWidth + (currHeight * this.craftingScreenHandler.getCraftingWidth()), amount, currWidth, currHeight);
             }
-        }
-    }
-
-    public void acceptAlignedInput(Iterator<Ingredient> inputs, int amount, int slotX, int slotY) {
-        Slot slot = this.craftingScreenHandler.getSlot(1 + slotX + (slotY * this.craftingScreenHandler.getCraftingWidth()));
-        Ingredient ingredient = inputs.next();
-        if (!ingredient.isEmpty()) {
-            this.ghostSlots.addSlot(ingredient, slot.x, slot.y);
         }
     }
 }

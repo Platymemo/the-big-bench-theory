@@ -56,25 +56,19 @@ public class ScreenPlacementHelper {
     }
 
     public int getRecipeBookY(int screenHeight) {
-        switch(this.order) {
-            case 0:
-                return screenHeight / 2 - 49;
-            case 3:
-                return (screenHeight - height) / 2 + craftingResultStartY + 50;
-            default:
-                return (screenHeight - height) / 2 + craftingResultStartY + 36;
-        }
+        return switch (this.order) {
+            case 0 -> screenHeight / 2 - 49;
+            case 3 -> (screenHeight - height) / 2 + craftingResultStartY + 50;
+            default -> (screenHeight - height) / 2 + craftingResultStartY + 36;
+        };
     }
 
     public int getRecipeBookWidth(int width) {
-        switch(this.order) {
-            case 2:
-                return width - 38;
-            case 3:
-                return width - 72;
-            default:
-                return width;
-        }
+        return switch (this.order) {
+            case 2 -> width - 38;
+            case 3 -> width - 72;
+            default -> width;
+        };
     }
 
     public int getGridStartX() {

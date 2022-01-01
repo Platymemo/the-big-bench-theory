@@ -18,6 +18,7 @@ import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.recipe.*;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
@@ -76,12 +77,14 @@ public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractReci
 
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void fillInputSlots(boolean craftAll, Recipe<?> recipe, ServerPlayerEntity player) {
-        new MegaInputSlotRecipeFiller(this).fillInputSlots(player, recipe, craftAll);
+        new MegaInputSlotRecipeFiller<>(this).fillInputSlots(player, (Recipe<CraftingInventory>) recipe, craftAll);
     }
 
-    protected static void updateResult(int syncId, World world, PlayerEntity player, CraftingInventory craftingInventory, CraftingResultInventory resultInventory) {
+    @SuppressWarnings("ConstantConditions")
+    protected static void updateResult(ScreenHandler handler, int syncId, World world, PlayerEntity player, CraftingInventory craftingInventory, CraftingResultInventory resultInventory) {
         if (!world.isClient) {
             ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)player;
             ItemStack itemStack = ItemStack.EMPTY;
@@ -102,66 +105,68 @@ public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractReci
             }
 
             resultInventory.setStack(0, itemStack);
-            serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(syncId, 0, itemStack));
+            serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(syncId, handler.nextRevision(), 0, itemStack));
         }
     }
 
+    @Override
     public void onContentChanged(Inventory inventory) {
-        this.context.run((world, blockPos) -> {
-            updateResult(this.syncId, world, this.player, this.input, this.result);
-        });
+        this.context.run((world, blockPos) -> updateResult(this, this.syncId, world, this.player, this.input, this.result));
     }
 
-    public void populateRecipeFinder(RecipeFinder finder) {
+    @Override
+    public void populateRecipeFinder(RecipeMatcher finder) {
         this.input.provideRecipeInputs(finder);
     }
 
+    @Override
     public void clearCraftingSlots() {
         this.input.clear();
         this.result.clear();
     }
 
+    @Override
     public boolean matches(Recipe<? super CraftingInventory> recipe) {
         return recipe.matches(this.input, this.player.world);
     }
 
+    @Override
     public void close(PlayerEntity player) {
         super.close(player);
-        this.context.run((world, blockPos) -> {
-            this.dropInventory(player, world, this.input);
-        });
+        this.context.run((world, blockPos) -> this.dropInventory(player, this.input));
     }
 
+    @Override
     public boolean canUse(PlayerEntity player) {
-        return this.context.run((world, blockPos) -> world.getBlockState(blockPos).isIn(BigBenchTagRegistry.BIG_BENCHES) && player.squaredDistanceTo((double) blockPos.getX() + 0.5D, (double) blockPos.getY() + 0.5D, (double) blockPos.getZ() + 0.5D) <= 64.0D, true);
+        return this.context.get((world, blockPos) -> world.getBlockState(blockPos).isIn(BigBenchTagRegistry.BIG_BENCHES) && player.squaredDistanceTo((double) blockPos.getX() + 0.5D, (double) blockPos.getY() + 0.5D, (double) blockPos.getZ() + 0.5D) <= 64.0D, false);
     }
 
+    @Override
     public ItemStack transferSlot(PlayerEntity player, int index) {
+        int size = table_size * table_size;
         ItemStack tempStack = ItemStack.EMPTY;
         Slot targetSlot = this.slots.get(index);
-        if (targetSlot != null && targetSlot.hasStack()) {
+        if (targetSlot.hasStack()) {
             ItemStack stackInTargetSlot = targetSlot.getStack();
             tempStack = stackInTargetSlot.copy();
             if (index == 0) {
-                this.context.run((world, blockPos) -> {
-                    stackInTargetSlot.getItem().onCraft(stackInTargetSlot, world, player);
-                });
-                if (!this.insertItem(stackInTargetSlot, (table_size * table_size) + 1, (table_size * table_size) + 1 + 36, true)) {
+                this.context.run((world, blockPos) -> stackInTargetSlot.getItem().onCraft(stackInTargetSlot, world, player));
+                if (!this.insertItem(stackInTargetSlot, size + 1, size + 1 + 36, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                targetSlot.onStackChanged(stackInTargetSlot, tempStack);
-            } else if (index >= (table_size * table_size) + 1 && index < (table_size * table_size) + 1 + 36) {
-                if (!this.insertItem(stackInTargetSlot, 1, (table_size * table_size) + 1, false)) {
-                    if (index < (table_size * table_size) + 1 + 27) {
-                        if (!this.insertItem(stackInTargetSlot, (table_size * table_size) + 1 + 27, (table_size * table_size) + 1 + 36, false)) {
+                targetSlot.onQuickTransfer(stackInTargetSlot, tempStack);
+            } else if (index >= size + 1 && index < size + 1 + 36) {
+                if (!this.insertItem(stackInTargetSlot, 1, size + 1, false)) {
+                    if (index < size + 1 + 27) {
+                        if (!this.insertItem(stackInTargetSlot, size + 1 + 27, size + 1 + 36, false)) {
                             return ItemStack.EMPTY;
                         }
-                    } else if (!this.insertItem(stackInTargetSlot, (table_size * table_size) + 1, (table_size * table_size) + 1 + 27, false)) {
+                    } else if (!this.insertItem(stackInTargetSlot, size + 1, size + 1 + 27, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-            } else if (!this.insertItem(stackInTargetSlot, (table_size * table_size) + 1, (table_size * table_size) + 1 + 36, false)) {
+            } else if (!this.insertItem(stackInTargetSlot, size + 1, size + 1 + 36, false)) {
                 return ItemStack.EMPTY;
             }
 
@@ -175,37 +180,48 @@ public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractReci
                 return ItemStack.EMPTY;
             }
 
-            ItemStack itemStack3 = targetSlot.onTakeItem(player, stackInTargetSlot);
+            targetSlot.onTakeItem(player, stackInTargetSlot);
             if (index == 0) {
-                player.dropItem(itemStack3, false);
+                player.dropItem(stackInTargetSlot, false);
             }
         }
 
         return tempStack;
     }
 
+    @Override
     public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
         return slot.inventory != this.result && super.canInsertIntoSlot(stack, slot);
     }
 
+    @Override
+    public boolean canInsertIntoSlot(int index) {
+        return index != getCraftingResultSlotIndex();
+    }
+
+    @Override
     public int getCraftingResultSlotIndex() {
         return 0;
     }
 
+    @Override
     public int getCraftingWidth() {
         return this.input.getWidth();
     }
 
+    @Override
     public int getCraftingHeight() {
         return this.input.getHeight();
     }
 
     @Environment(EnvType.CLIENT)
+    @Override
     public int getCraftingSlotCount() {
         return this.input.size() + this.result.size();
     }
 
     @Environment(EnvType.CLIENT)
+    @Override
     public RecipeBookCategory getCategory() {
         return RecipeBookCategory.CRAFTING;
     }
