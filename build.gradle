@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.5-SNAPSHOT'
+    id 'fabric-loom' version '0.10-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -11,7 +11,6 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-    jcenter()
     maven {
         url = "https://maven.terraformersmc.com/releases"
     }
@@ -40,14 +39,15 @@ dependencies {
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
     // REI integration
-    modImplementation "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
+    modImplementation "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 
     // NBT Crafting integration
-    modImplementation "de.siphalor:nbtcrafting-1.16:2+"
+    modImplementation "de.siphalor:nbtcrafting-1.17:${project.nbt_crafting_version}"
 
+    // TODO when KubeJS hits 1.17
     // KubeJS Integration
-    modImplementation "curse.maven:kubejs-${project.kubejs_project}:${project.kubejs_file}"
-	modImplementation "curse.maven:architectury-api-${project.architectury_project}:${project.architectury_file}"
+    // modImplementation "curse.maven:kubejs-${project.kubejs_project}:${project.kubejs_file}"
+    // modImplementation "curse.maven:architectury-api-${project.architectury_project}:${project.architectury_file}"
 }
 
 processResources {
@@ -65,13 +65,8 @@ tasks.withType(JavaCompile).configureEach {
     // If Javadoc is generated, this must be specified in that task too.
     it.options.encoding = "UTF-8"
 
-    // The Minecraft launcher currently installs Java 8 for users, so your mod probably wants to target Java 8 too
-    // JDK 9 introduced a new way of specifying this that will make sure no newer classes or methods are used.
-    // We'll use that if it's available, but otherwise we'll use the older option.
-    def targetVersion = 8
-    if (JavaVersion.current().isJava9Compatible()) {
-        it.options.release = targetVersion
-    }
+    // Minecraft 1.17 (21w19a) upwards uses Java 16.
+    it.options.release = 16
 }
 
 java {
@@ -91,13 +86,7 @@ jar {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            // add all the jars that should be included when publishing to maven
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
+            from components.java
         }
     }
 
