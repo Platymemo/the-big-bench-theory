@@ -39,8 +39,7 @@ public class BigBenchCraftingScreen extends HandledScreen<AbstractBigBenchCrafti
         this.narrow = this.width < this.backgroundWidth + 204;
         this.recipeBook.initialize(placementHelper.getRecipeBookWidth(width), this.height, this.client, this.narrow, this.handler);
         this.x = this.recipeBook.findLeftEdge(this.width, this.backgroundWidth);
-        this.addDrawable(new TexturedButtonWidget(placementHelper.getRecipeBookX(x), placementHelper.getRecipeBookY(this.height), 20, 18, 0, 0, 19, RECIPE_BUTTON_TEXTURE, (buttonWidget) -> {
-            this.recipeBook.reset();
+        this.addDrawableChild(new TexturedButtonWidget(placementHelper.getRecipeBookX(x), placementHelper.getRecipeBookY(this.height), 20, 18, 0, 0, 19, RECIPE_BUTTON_TEXTURE, (buttonWidget) -> {
             this.recipeBook.toggleOpen();
             this.x = this.recipeBook.findLeftEdge(this.width, this.backgroundWidth);
             ((TexturedButtonWidget)buttonWidget).setPos(placementHelper.getRecipeBookX(x), placementHelper.getRecipeBookY(this.height));
@@ -90,10 +89,12 @@ public class BigBenchCraftingScreen extends HandledScreen<AbstractBigBenchCrafti
         super.drawForeground(matrices, mouseX, mouseY);
     }
 
+    @Override
     protected boolean isPointWithinBounds(int xPosition, int yPosition, int width, int height, double pointX, double pointY) {
         return (!this.narrow || !this.recipeBook.isOpen()) && super.isPointWithinBounds(xPosition, yPosition, width, height, pointX, pointY);
     }
 
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (this.recipeBook.mouseClicked(mouseX, mouseY, button)) {
             this.setFocused(this.recipeBook);
@@ -103,25 +104,30 @@ public class BigBenchCraftingScreen extends HandledScreen<AbstractBigBenchCrafti
         }
     }
 
+    @Override
     protected boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int button) {
         boolean bl = mouseX < (double)left || mouseY < (double)top || mouseX >= (double)(left + this.backgroundWidth) || mouseY >= (double)(top + this.backgroundHeight);
         return this.recipeBook.isClickOutsideBounds(mouseX, mouseY, this.x, this.y, this.backgroundWidth, this.backgroundHeight, button) && bl;
     }
 
+    @Override
     protected void onMouseClick(Slot slot, int invSlot, int clickData, SlotActionType actionType) {
         super.onMouseClick(slot, invSlot, clickData, actionType);
         this.recipeBook.slotClicked(slot);
     }
 
+    @Override
     public void refreshRecipeBook() {
         this.recipeBook.refresh();
     }
 
+    @Override
     public void removed() {
         this.recipeBook.close();
         super.removed();
     }
 
+    @Override
     public RecipeBookWidget getRecipeBookWidget() {
         return this.recipeBook;
     }
