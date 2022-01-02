@@ -2,11 +2,12 @@
   "required": false,
   "minVersion": "0.8",
   "package": "com.github.platymemo.bigbenchtheory.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "mixins": [
     "CraftingScreenHandlerMixin"
   ],
   "client": [
+    "client.RecipeBookWidgetAccessor",
     "client.RecipeBookWidgetMixin",
     "client.ClientRecipeBookMixin"
   ],

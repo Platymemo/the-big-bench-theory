@@ -25,11 +25,9 @@
     "client": [
       "com.github.platymemo.bigbenchtheory.BigBenchTheoryClient"
     ],
-    "rei_containers": [
-      "com.github.platymemo.bigbenchtheory.compat.rei.MegaCraftingContainerPlugin"
-    ],
     "rei_plugins": [
-      "com.github.platymemo.bigbenchtheory.compat.rei.MegaCraftingPlugin"
+      "com.github.platymemo.bigbenchtheory.compat.rei.plugin.MegaCraftingClientPlugin",
+      "com.github.platymemo.bigbenchtheory.compat.rei.plugin.MegaCraftingPlugin"
     ]
   },
   "mixins": [
