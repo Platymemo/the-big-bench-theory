@@ -40,7 +40,7 @@ public class ScreenPlacementHelper {
             this.craftingResultStartX = 178;
             this.playerInventoryStartY += 72;
             this.playerInventoryStartX += 18;
-        } else if (benchSize.size == 9){
+        } else if (benchSize.size == 9) {
             this.order = 3;
             this.width += 72;
             this.height += 90;

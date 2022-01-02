@@ -15,15 +15,15 @@ import java.util.List;
 import java.util.Optional;
 
 public class MegaCustomDisplay extends MegaCraftingDisplay<Recipe<?>> {
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
 
     public MegaCustomDisplay(@Nullable Recipe<?> possibleRecipe, List<EntryIngredient> input, List<EntryIngredient> output) {
         super(input, output, Optional.ofNullable(possibleRecipe));
         BitSet row = new BitSet(9);
         BitSet column = new BitSet(9);
 
-        for(int i = 0; i < 9 * 9; ++i) {
+        for (int i = 0; i < 9 * 9; ++i) {
             if (i < input.size()) {
                 EntryIngredient stacks = input.get(i);
                 if (stacks.stream().anyMatch((stack) -> !stack.isEmpty())) {
@@ -42,13 +42,14 @@ public class MegaCustomDisplay extends MegaCraftingDisplay<Recipe<?>> {
         return new MegaCustomDisplay(optionalRecipe, input, output);
     }
 
+    @Override
     public List<EntryIngredient> getInputEntries(MenuSerializationContext<?, ?, ?> context, MenuInfo<?, ?> info, boolean fill) {
         if (fill && info instanceof SimpleGridMenuInfo gridInfo) {
             List<EntryIngredient> out = new ArrayList<>();
             int craftingWidth = gridInfo.getCraftingWidth(context.getMenu());
             int craftingHeight = gridInfo.getCraftingHeight(context.getMenu());
 
-            for(int i = 0; i < 9 * 9; ++i) {
+            for (int i = 0; i < 9 * 9; ++i) {
                 if (i < this.inputs.size()) {
                     int x = i % 9;
                     if (x < craftingWidth) {
@@ -60,7 +61,7 @@ public class MegaCustomDisplay extends MegaCraftingDisplay<Recipe<?>> {
                 }
             }
 
-            while(out.size() < craftingWidth * craftingHeight) {
+            while (out.size() < craftingWidth * craftingHeight) {
                 out.add(EntryIngredient.empty());
             }
 
@@ -70,10 +71,12 @@ public class MegaCustomDisplay extends MegaCraftingDisplay<Recipe<?>> {
         }
     }
 
+    @Override
     public int getWidth() {
         return this.width;
     }
 
+    @Override
     public int getHeight() {
         return this.height;
     }

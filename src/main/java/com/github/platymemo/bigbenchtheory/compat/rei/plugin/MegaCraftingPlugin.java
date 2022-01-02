@@ -7,7 +7,6 @@ import com.github.platymemo.bigbenchtheory.screen.handlers.MassiveCraftingScreen
 import com.github.platymemo.bigbenchtheory.screen.handlers.TinyCraftingScreenHandler;
 import com.github.platymemo.bigbenchtheory.screen.handlers.UltimateCraftingScreenHandler;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
-import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.display.DisplaySerializerRegistry;
 import me.shedaniel.rei.api.common.display.SimpleGridMenuDisplay;
 import me.shedaniel.rei.api.common.plugins.REIServerPlugin;
@@ -16,7 +15,6 @@ import me.shedaniel.rei.api.common.transfer.info.MenuInfoRegistry;
 import me.shedaniel.rei.api.common.transfer.info.simple.RecipeBookGridMenuInfo;
 import me.shedaniel.rei.plugin.common.BuiltinPlugin;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
-import net.minecraft.screen.ScreenHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +58,8 @@ public class MegaCraftingPlugin implements REIServerPlugin {
             int leftBound = (width - 3) / 2;
             int topBound = (height - 3) / 2;
             List<Integer> ints = new ArrayList<>();
-            for (int y=0; y<3; y++) {
-                for (int x=0; x<3; x++) {
+            for (int y = 0; y < 3; y++) {
+                for (int x = 0; x < 3; x++) {
                     ints.add(1 + (leftBound + x) + (width * (topBound + y)));
                 }
             }

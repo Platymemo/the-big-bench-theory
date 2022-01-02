@@ -1,7 +1,6 @@
 package com.github.platymemo.bigbenchtheory.compat.rei.category.handler;
 
 import com.github.platymemo.bigbenchtheory.compat.rei.display.MegaCraftingDisplay;
-import com.github.platymemo.bigbenchtheory.compat.rei.plugin.MegaCraftingPlugin;
 import com.github.platymemo.bigbenchtheory.mixin.client.RecipeBookWidgetAccessor;
 import com.github.platymemo.bigbenchtheory.screen.handlers.AbstractBigBenchCraftingScreenHandler;
 import dev.architectury.networking.NetworkManager;
@@ -36,6 +35,39 @@ import java.util.List;
 
 public class MegaCraftingCategoryHandler implements TransferHandler {
 
+    private static MenuInfoContext<ScreenHandler, PlayerEntity, Display> ofContext(ScreenHandler menu, MenuInfo<ScreenHandler, Display> info, Display display) {
+        return new MenuInfoContext<>() {
+            @Override
+            public ScreenHandler getMenu() {
+                return menu;
+            }
+
+            @Override
+            public PlayerEntity getPlayerEntity() {
+                return MinecraftClient.getInstance().player;
+            }
+
+            @Override
+            public MenuInfo<ScreenHandler, Display> getContainerInfo() {
+                return info;
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public CategoryIdentifier<Display> getCategoryIdentifier() {
+                return (CategoryIdentifier<Display>) display.getCategoryIdentifier();
+            }
+
+            @Override
+            public Display getDisplay() {
+                return display;
+            }
+        };
+    }
+
+    /**
+     * High priority because we only affect Big bench Theory displays and screens
+     */
     @Override
     public double getPriority() {
         return 420.69D;
@@ -93,6 +125,7 @@ public class MegaCraftingCategoryHandler implements TransferHandler {
         return Result.createNotApplicable();
     }
 
+    @Override
     @SuppressWarnings("UnstableApiUsage")
     @Environment(EnvType.CLIENT)
     @Nullable
@@ -106,31 +139,6 @@ public class MegaCraftingCategoryHandler implements TransferHandler {
         } else {
             return null;
         }
-    }
-
-    private static MenuInfoContext<ScreenHandler, PlayerEntity, Display> ofContext(ScreenHandler menu, MenuInfo<ScreenHandler, Display> info, Display display) {
-        return new MenuInfoContext<>() {
-            public ScreenHandler getMenu() {
-                return menu;
-            }
-
-            public PlayerEntity getPlayerEntity() {
-                return MinecraftClient.getInstance().player;
-            }
-
-            public MenuInfo<ScreenHandler, Display> getContainerInfo() {
-                return info;
-            }
-
-            @SuppressWarnings("unchecked")
-            public CategoryIdentifier<Display> getCategoryIdentifier() {
-                return (CategoryIdentifier<Display>) display.getCategoryIdentifier();
-            }
-
-            public Display getDisplay() {
-                return display;
-            }
-        };
     }
 
     public IntList hasItems(ScreenHandler menu, MenuInfo<ScreenHandler, Display> info, Display display, List<List<ItemStack>> inputs) {

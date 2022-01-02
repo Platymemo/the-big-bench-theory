@@ -5,7 +5,10 @@ import com.github.platymemo.bigbenchtheory.compat.nbtcrafting.NBTCraftingUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -40,93 +43,13 @@ public class MegaShapedRecipe implements MegaRecipe {
         this.output = output;
     }
 
-    public Identifier getId() {
-        return this.id;
-    }
-
-    public RecipeSerializer<?> getSerializer() {
-        return BigBenchTheory.MEGA_SHAPED_RECIPE_SERIALIZER;
-    }
-
-    @Environment(EnvType.CLIENT)
-    public String getGroup() {
-        return this.group;
-    }
-
-    public ItemStack getOutput() {
-        return this.output;
-    }
-
-    public DefaultedList<Ingredient> getPreviewInputs() {
-        return this.inputs;
-    }
-
-    @Environment(EnvType.CLIENT)
-    public boolean fits(int width, int height) {
-        return width >= this.width && height >= this.height;
-    }
-
-    public boolean matches(CraftingInventory craftingInventory, World world) {
-        for(int i = 0; i <= craftingInventory.getWidth() - this.width; ++i) {
-            for(int j = 0; j <= craftingInventory.getHeight() - this.height; ++j) {
-                if (this.matchesSmall(craftingInventory, i, j, true)) {
-                    return true;
-                }
-
-                if (this.matchesSmall(craftingInventory, i, j, false)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private boolean matchesSmall(CraftingInventory inv, int offsetX, int offsetY, boolean bl) {
-        for(int i = 0; i < inv.getWidth(); ++i) {
-            for(int j = 0; j < inv.getHeight(); ++j) {
-                int k = i - offsetX;
-                int l = j - offsetY;
-                Ingredient ingredient = Ingredient.EMPTY;
-                if (k >= 0 && l >= 0 && k < this.width && l < this.height) {
-                    if (bl) {
-                        ingredient = this.inputs.get(this.width - k - 1 + l * this.width);
-                    } else {
-                        ingredient = this.inputs.get(k + l * this.width);
-                    }
-                }
-
-                if (!ingredient.test(inv.getStack(i + j * inv.getWidth()))) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    public ItemStack craft(CraftingInventory craftingInventory) {
-        if (FabricLoader.getInstance().isModLoaded("nbtcrafting")) {
-            return NBTCraftingUtil.getOutputStack(this.output, getPreviewInputs(), craftingInventory);
-        }
-        return this.output.copy();
-    }
-
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
-    }
-
     private static DefaultedList<Ingredient> getIngredients(String[] pattern, Map<String, Ingredient> key, int width, int height) {
         DefaultedList<Ingredient> defaultedList = DefaultedList.ofSize(width * height, Ingredient.EMPTY);
         Set<String> set = Sets.newHashSet(key.keySet());
         set.remove(" ");
 
-        for(int i = 0; i < pattern.length; ++i) {
-            for(int j = 0; j < pattern[i].length(); ++j) {
+        for (int i = 0; i < pattern.length; ++i) {
+            for (int j = 0; j < pattern[i].length(); ++j) {
                 String string = pattern[i].substring(j, j + 1);
                 Ingredient ingredient = key.get(string);
                 if (ingredient == null) {
@@ -152,7 +75,7 @@ public class MegaShapedRecipe implements MegaRecipe {
         int k = 0;
         int l = 0;
 
-        for(int m = 0; m < lines.length; ++m) {
+        for (int m = 0; m < lines.length; ++m) {
             String string = lines[m];
             i = Math.min(i, findNextIngredient(string));
             int n = findNextIngredientReverse(string);
@@ -173,7 +96,7 @@ public class MegaShapedRecipe implements MegaRecipe {
         } else {
             String[] strings = new String[lines.length - l - k];
 
-            for(int o = 0; o < strings.length; ++o) {
+            for (int o = 0; o < strings.length; ++o) {
                 strings[o] = lines[o + k].substring(i, j + 1);
             }
 
@@ -184,14 +107,16 @@ public class MegaShapedRecipe implements MegaRecipe {
     private static int findNextIngredient(String pattern) {
         int i;
 
-        for(i = 0; i < pattern.length() && pattern.charAt(i) == ' '; ++i) { }
+        for (i = 0; i < pattern.length() && pattern.charAt(i) == ' '; ++i) {
+        }
 
         return i;
     }
 
     private static int findNextIngredientReverse(String pattern) {
         int i;
-        for(i = pattern.length() - 1; i >= 0 && pattern.charAt(i) == ' '; --i) { }
+        for (i = pattern.length() - 1; i >= 0 && pattern.charAt(i) == ' '; --i) {
+        }
 
         return i;
     }
@@ -203,7 +128,7 @@ public class MegaShapedRecipe implements MegaRecipe {
         } else if (strings.length == 0) {
             throw new JsonSyntaxException("Invalid pattern: empty pattern not allowed");
         } else {
-            for(int i = 0; i < strings.length; ++i) {
+            for (int i = 0; i < strings.length; ++i) {
                 String string = JsonHelper.asString(json.get(i), "pattern[" + i + "]");
                 if (string.length() > 9) {
                     throw new JsonSyntaxException("Invalid pattern: too many columns, 9 is maximum");
@@ -239,7 +164,95 @@ public class MegaShapedRecipe implements MegaRecipe {
         return map;
     }
 
+    @Override
+    public Identifier getId() {
+        return this.id;
+    }
+
+    @Override
+    public RecipeSerializer<?> getSerializer() {
+        return BigBenchTheory.MEGA_SHAPED_RECIPE_SERIALIZER;
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public String getGroup() {
+        return this.group;
+    }
+
+    @Override
+    public ItemStack getOutput() {
+        return this.output;
+    }
+
+    public DefaultedList<Ingredient> getPreviewInputs() {
+        return this.inputs;
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public boolean fits(int width, int height) {
+        return width >= this.width && height >= this.height;
+    }
+
+    @Override
+    public boolean matches(CraftingInventory craftingInventory, World world) {
+        for (int i = 0; i <= craftingInventory.getWidth() - this.width; ++i) {
+            for (int j = 0; j <= craftingInventory.getHeight() - this.height; ++j) {
+                if (this.matchesSmall(craftingInventory, i, j, true)) {
+                    return true;
+                }
+
+                if (this.matchesSmall(craftingInventory, i, j, false)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean matchesSmall(CraftingInventory inv, int offsetX, int offsetY, boolean bl) {
+        for (int i = 0; i < inv.getWidth(); ++i) {
+            for (int j = 0; j < inv.getHeight(); ++j) {
+                int k = i - offsetX;
+                int l = j - offsetY;
+                Ingredient ingredient = Ingredient.EMPTY;
+                if (k >= 0 && l >= 0 && k < this.width && l < this.height) {
+                    if (bl) {
+                        ingredient = this.inputs.get(this.width - k - 1 + l * this.width);
+                    } else {
+                        ingredient = this.inputs.get(k + l * this.width);
+                    }
+                }
+
+                if (!ingredient.test(inv.getStack(i + j * inv.getWidth()))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public ItemStack craft(CraftingInventory craftingInventory) {
+        if (FabricLoader.getInstance().isModLoaded("nbtcrafting")) {
+            return NBTCraftingUtil.getOutputStack(this.output, getPreviewInputs(), craftingInventory);
+        }
+        return this.output.copy();
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
     public static class Serializer implements RecipeSerializer<MegaShapedRecipe> {
+        @Override
         public MegaShapedRecipe read(Identifier identifier, JsonObject jsonObject) {
             String string = JsonHelper.getString(jsonObject, "group", "");
             Map<String, Ingredient> map = MegaShapedRecipe.getComponents(JsonHelper.getObject(jsonObject, "key"));
@@ -251,13 +264,14 @@ public class MegaShapedRecipe implements MegaRecipe {
             return new MegaShapedRecipe(identifier, string, i, j, defaultedList, itemStack);
         }
 
+        @Override
         public MegaShapedRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
             int i = packetByteBuf.readVarInt();
             int j = packetByteBuf.readVarInt();
             String string = packetByteBuf.readString(32767);
             DefaultedList<Ingredient> defaultedList = DefaultedList.ofSize(i * j, Ingredient.EMPTY);
 
-            for(int k = 0; k < defaultedList.size(); ++k) {
+            for (int k = 0; k < defaultedList.size(); ++k) {
                 defaultedList.set(k, Ingredient.fromPacket(packetByteBuf));
             }
 
@@ -265,6 +279,7 @@ public class MegaShapedRecipe implements MegaRecipe {
             return new MegaShapedRecipe(identifier, string, i, j, defaultedList, itemStack);
         }
 
+        @Override
         public void write(PacketByteBuf packetByteBuf, MegaShapedRecipe shapedRecipe) {
             packetByteBuf.writeVarInt(shapedRecipe.width);
             packetByteBuf.writeVarInt(shapedRecipe.height);

@@ -30,7 +30,7 @@ public class BigBenchBlockRegistry {
     public static final Block BIGGER_BENCH = add("bigger_bench", new BigBenchBlock(
             FabricBlockSettings.of(Material.METAL, MapColor.DIAMOND_BLUE).requiresTool().strength(5.0F, 6.0F).sounds(BlockSoundGroup.METAL), BenchSize.BIGGER), ItemGroup.DECORATIONS);
     public static final Block BIGGEST_BENCH = add("biggest_bench", new BigBenchBlock(
-            FabricBlockSettings.of(Material.METAL, MapColor.BLACK).requiresTool().strength(50.0F, 1200.0F).sounds(BlockSoundGroup.NETHERITE), BenchSize.BIGGEST), ItemGroup.DECORATIONS,
+                    FabricBlockSettings.of(Material.METAL, MapColor.BLACK).requiresTool().strength(50.0F, 1200.0F).sounds(BlockSoundGroup.NETHERITE), BenchSize.BIGGEST), ItemGroup.DECORATIONS,
             new FabricItemSettings().fireproof());
 
     private static <B extends Block> B add(String name, B block, ItemGroup tab) {

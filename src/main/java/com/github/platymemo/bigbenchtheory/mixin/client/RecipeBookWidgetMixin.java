@@ -12,7 +12,6 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeGridAligner;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

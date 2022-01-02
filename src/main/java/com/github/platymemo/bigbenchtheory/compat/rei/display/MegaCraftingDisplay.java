@@ -31,18 +31,6 @@ public abstract class MegaCraftingDisplay<C extends Recipe<?>> extends BasicDisp
         this.recipe = recipe;
     }
 
-    public CategoryIdentifier<?> getCategoryIdentifier() {
-        return MegaCraftingPlugin.MEGA_CRAFTING;
-    }
-
-    public Optional<C> getOptionalRecipe() {
-        return this.recipe;
-    }
-
-    public Optional<Identifier> getDisplayLocation() {
-        return this.getOptionalRecipe().map(Recipe::getId);
-    }
-
     public static int getSlotWithSize(MegaCraftingDisplay<?> display, int index, int craftingGridWidth) {
         return getSlotWithSize(display.getWidth(), index, craftingGridWidth);
     }
@@ -53,18 +41,38 @@ public abstract class MegaCraftingDisplay<C extends Recipe<?>> extends BasicDisp
         return craftingGridWidth * y + x;
     }
 
+    public static BasicDisplay.Serializer<MegaCraftingDisplay<?>> serializer() {
+        return BasicDisplay.Serializer.<MegaCraftingDisplay<?>>ofSimple(MegaCustomDisplay::simple)
+                .inputProvider(display -> display.getOrganisedInputEntries(9, 9));
+    }
+
+    @Override
+    public CategoryIdentifier<?> getCategoryIdentifier() {
+        return MegaCraftingPlugin.MEGA_CRAFTING;
+    }
+
+    public Optional<C> getOptionalRecipe() {
+        return this.recipe;
+    }
+
+    @Override
+    public Optional<Identifier> getDisplayLocation() {
+        return this.getOptionalRecipe().map(Recipe::getId);
+    }
+
+    @Override
     public List<EntryIngredient> getInputEntries(MenuSerializationContext<?, ?, ?> context, MenuInfo<?, ?> info, boolean fill) {
-        AbstractRecipeScreenHandler<?> handler = ((AbstractRecipeScreenHandler<?>)context.getMenu());
+        AbstractRecipeScreenHandler<?> handler = ((AbstractRecipeScreenHandler<?>) context.getMenu());
         int size = handler.getCraftingHeight() * handler.getCraftingWidth();
         List<EntryIngredient> list = new ArrayList<>(size);
 
-        for(int i = 0; i < size; ++i) {
+        for (int i = 0; i < size; ++i) {
             list.add(EntryIngredient.empty());
         }
 
         List<EntryIngredient> inputEntries = this.getInputEntries();
 
-        for(int i = 0; i < inputEntries.size(); ++i) {
+        for (int i = 0; i < inputEntries.size(); ++i) {
             list.set(getSlotWithSize(this, i, handler.getCraftingWidth()), inputEntries.get(i));
         }
 
@@ -86,10 +94,5 @@ public abstract class MegaCraftingDisplay<C extends Recipe<?>> extends BasicDisp
             list.set(getSlotWithSize(this, i, menuWidth), getInputEntries().get(i));
         }
         return list;
-    }
-
-    public static BasicDisplay.Serializer<MegaCraftingDisplay<?>> serializer() {
-        return BasicDisplay.Serializer.<MegaCraftingDisplay<?>>ofSimple(MegaCustomDisplay::simple)
-                .inputProvider(display -> display.getOrganisedInputEntries(9, 9));
     }
 }

@@ -20,8 +20,8 @@ public class CraftingScreenHandlerMixin {
 
     @SuppressWarnings("ConstantConditions")
     @ModifyVariable(at = @At(value = "INVOKE",
-                             target = "Lnet/minecraft/inventory/CraftingResultInventory;setStack(ILnet/minecraft/item/ItemStack;)V"),
-                    method = "updateResult"
+            target = "Lnet/minecraft/inventory/CraftingResultInventory;setStack(ILnet/minecraft/item/ItemStack;)V"),
+            method = "updateResult"
     )
     private static ItemStack checkForMegaRecipes(ItemStack stack, ScreenHandler handler, World world, PlayerEntity player, CraftingInventory craftingInventory, CraftingResultInventory resultInventory) {
         if (stack.isEmpty()) {

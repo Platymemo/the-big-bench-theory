@@ -32,6 +32,7 @@ public class BigBenchCraftingScreen extends HandledScreen<AbstractBigBenchCrafti
         this.placementHelper = handler.placementHelper;
     }
 
+    @Override
     protected void init() {
         this.backgroundWidth = this.placementHelper.getWidth();
         this.backgroundHeight = this.placementHelper.getHeight();
@@ -42,7 +43,7 @@ public class BigBenchCraftingScreen extends HandledScreen<AbstractBigBenchCrafti
         this.addDrawableChild(new TexturedButtonWidget(placementHelper.getRecipeBookX(x), placementHelper.getRecipeBookY(this.height), 20, 18, 0, 0, 19, RECIPE_BUTTON_TEXTURE, (buttonWidget) -> {
             this.recipeBook.toggleOpen();
             this.x = this.recipeBook.findLeftEdge(this.width, this.backgroundWidth);
-            ((TexturedButtonWidget)buttonWidget).setPos(placementHelper.getRecipeBookX(x), placementHelper.getRecipeBookY(this.height));
+            ((TexturedButtonWidget) buttonWidget).setPos(placementHelper.getRecipeBookX(x), placementHelper.getRecipeBookY(this.height));
         }));
         this.addSelectableChild(this.recipeBook);
         this.setInitialFocus(this.recipeBook);
@@ -58,6 +59,7 @@ public class BigBenchCraftingScreen extends HandledScreen<AbstractBigBenchCrafti
         this.recipeBook.update();
     }
 
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         if (this.recipeBook.isOpen() && this.narrow) {
@@ -73,6 +75,7 @@ public class BigBenchCraftingScreen extends HandledScreen<AbstractBigBenchCrafti
         this.recipeBook.drawTooltip(matrices, this.x, this.y, mouseX, mouseY);
     }
 
+    @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -106,7 +109,7 @@ public class BigBenchCraftingScreen extends HandledScreen<AbstractBigBenchCrafti
 
     @Override
     protected boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int button) {
-        boolean bl = mouseX < (double)left || mouseY < (double)top || mouseX >= (double)(left + this.backgroundWidth) || mouseY >= (double)(top + this.backgroundHeight);
+        boolean bl = mouseX < (double) left || mouseY < (double) top || mouseX >= (double) (left + this.backgroundWidth) || mouseY >= (double) (top + this.backgroundHeight);
         return this.recipeBook.isClickOutsideBounds(mouseX, mouseY, this.x, this.y, this.backgroundWidth, this.backgroundHeight, button) && bl;
     }
 

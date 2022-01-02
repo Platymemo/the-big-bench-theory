@@ -1,6 +1,9 @@
 package com.github.platymemo.bigbenchtheory.block;
 
-import com.github.platymemo.bigbenchtheory.screen.handlers.*;
+import com.github.platymemo.bigbenchtheory.screen.handlers.GreaterCraftingScreenHandler;
+import com.github.platymemo.bigbenchtheory.screen.handlers.MassiveCraftingScreenHandler;
+import com.github.platymemo.bigbenchtheory.screen.handlers.TinyCraftingScreenHandler;
+import com.github.platymemo.bigbenchtheory.screen.handlers.UltimateCraftingScreenHandler;
 import com.github.platymemo.bigbenchtheory.util.BenchSize;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -18,11 +21,11 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BigBenchBlock extends Block{
-    private static final Text[] TITLES = { new TranslatableText("container.tinycrafting"),
-                                           new TranslatableText("container.greatercrafting"),
-                                           new TranslatableText("container.massivecrafting"),
-                                           new TranslatableText("container.ultimatecrafting") };
+public class BigBenchBlock extends Block {
+    private static final Text[] TITLES = {new TranslatableText("container.tinycrafting"),
+            new TranslatableText("container.greatercrafting"),
+            new TranslatableText("container.massivecrafting"),
+            new TranslatableText("container.ultimatecrafting")};
     private final BenchSize size;
 
     public BigBenchBlock(AbstractBlock.Settings settings, BenchSize benchSize) {
@@ -30,6 +33,8 @@ public class BigBenchBlock extends Block{
         this.size = benchSize;
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
             return ActionResult.SUCCESS;
@@ -40,6 +45,8 @@ public class BigBenchBlock extends Block{
         }
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
     public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
         if (size == BenchSize.TINY) {
             return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> new TinyCraftingScreenHandler(i, playerInventory, ScreenHandlerContext.create(world, pos)), TITLES[0]);

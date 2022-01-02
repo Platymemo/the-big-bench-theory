@@ -1,7 +1,7 @@
 package com.github.platymemo.bigbenchtheory.compat.rei.display;
 
-import me.shedaniel.rei.api.common.util.EntryIngredients;
 import com.github.platymemo.bigbenchtheory.recipe.MegaShapedRecipe;
+import me.shedaniel.rei.api.common.util.EntryIngredients;
 
 import java.util.Collections;
 import java.util.Optional;

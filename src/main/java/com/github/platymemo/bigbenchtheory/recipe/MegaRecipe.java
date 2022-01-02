@@ -6,14 +6,16 @@ import net.minecraft.recipe.RecipeType;
 
 public interface MegaRecipe extends Recipe<CraftingInventory> {
 
+    @Override
     default RecipeType<?> getType() {
         return Type.INSTANCE;
     }
 
     class Type implements RecipeType<MegaRecipe> {
-        private Type() {}
         public static final Type INSTANCE = new Type();
-
         public static final String ID = "mega_crafting";
+
+        private Type() {
+        }
     }
 }

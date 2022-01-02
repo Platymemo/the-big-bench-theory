@@ -4,8 +4,8 @@ import com.github.platymemo.bigbenchtheory.recipe.MegaInputSlotRecipeFiller;
 import com.github.platymemo.bigbenchtheory.recipe.MegaRecipe;
 import com.github.platymemo.bigbenchtheory.registry.BigBenchTagRegistry;
 import com.github.platymemo.bigbenchtheory.screen.MegaCraftingResultSlot;
-import com.github.platymemo.bigbenchtheory.util.ScreenPlacementHelper;
 import com.github.platymemo.bigbenchtheory.util.BenchSize;
+import com.github.platymemo.bigbenchtheory.util.ScreenPlacementHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,7 +15,10 @@ import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
-import net.minecraft.recipe.*;
+import net.minecraft.recipe.CraftingRecipe;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeMatcher;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
 import net.minecraft.screen.ScreenHandler;
@@ -28,12 +31,12 @@ import net.minecraft.world.World;
 import java.util.Optional;
 
 public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractRecipeScreenHandler<CraftingInventory> {
-    public ScreenPlacementHelper placementHelper;
+    public final ScreenHandlerContext context;
+    public final PlayerEntity player;
     private final int table_size;
     private final CraftingInventory input;
     private final CraftingResultInventory result;
-    public final ScreenHandlerContext context;
-    public final PlayerEntity player;
+    public ScreenPlacementHelper placementHelper;
 
     public AbstractBigBenchCraftingScreenHandler(int syncId, ScreenHandlerType<?> screenHandlerType, BenchSize benchSize, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(screenHandlerType, syncId);
@@ -57,36 +60,30 @@ public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractReci
         int n;
         int k = this.placementHelper.getGridStartX();
         int l = this.placementHelper.getGridStartY();
-        for(m = 0; m < table_size; ++m) {
-            for(n = 0; n < table_size; ++n) {
-                this.addSlot(new Slot(this.input, n + m * table_size,  k + n * 18, l + m * 18));
+        for (m = 0; m < table_size; ++m) {
+            for (n = 0; n < table_size; ++n) {
+                this.addSlot(new Slot(this.input, n + m * table_size, k + n * 18, l + m * 18));
             }
         }
 
         k = this.placementHelper.getInventoryStartX();
         l = this.placementHelper.getInventoryStartY();
-        for(m = 0; m < 3; ++m) {
-            for(n = 0; n < 9; ++n) {
+        for (m = 0; m < 3; ++m) {
+            for (n = 0; n < 9; ++n) {
                 this.addSlot(new Slot(playerInventory, n + m * 9 + 9, k + n * 18, l + m * 18));
             }
         }
 
-        for(m = 0; m < 9; ++m) {
+        for (m = 0; m < 9; ++m) {
             this.addSlot(new Slot(playerInventory, m, k + m * 18, l + 58));
         }
 
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void fillInputSlots(boolean craftAll, Recipe<?> recipe, ServerPlayerEntity player) {
-        new MegaInputSlotRecipeFiller<>(this).fillInputSlots(player, (Recipe<CraftingInventory>) recipe, craftAll);
-    }
-
     @SuppressWarnings("ConstantConditions")
     protected static void updateResult(ScreenHandler handler, int syncId, World world, PlayerEntity player, CraftingInventory craftingInventory, CraftingResultInventory resultInventory) {
         if (!world.isClient) {
-            ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)player;
+            ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
             ItemStack itemStack = ItemStack.EMPTY;
             Optional<MegaRecipe> optional = world.getServer().getRecipeManager().getFirstMatch(MegaRecipe.Type.INSTANCE, craftingInventory, world);
             if (optional.isPresent()) {
@@ -107,6 +104,12 @@ public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractReci
             resultInventory.setStack(0, itemStack);
             serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(syncId, handler.nextRevision(), 0, itemStack));
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void fillInputSlots(boolean craftAll, Recipe<?> recipe, ServerPlayerEntity player) {
+        new MegaInputSlotRecipeFiller<>(this).fillInputSlots(player, (Recipe<CraftingInventory>) recipe, craftAll);
     }
 
     @Override

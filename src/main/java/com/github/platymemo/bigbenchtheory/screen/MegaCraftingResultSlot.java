@@ -21,10 +21,12 @@ public class MegaCraftingResultSlot extends Slot {
         this.input = input;
     }
 
+    @Override
     public boolean canInsert(ItemStack stack) {
         return false;
     }
 
+    @Override
     public ItemStack takeStack(int amount) {
         if (this.hasStack()) {
             this.amount += Math.min(amount, this.getStack().getCount());
@@ -33,27 +35,31 @@ public class MegaCraftingResultSlot extends Slot {
         return super.takeStack(amount);
     }
 
+    @Override
     protected void onCrafted(ItemStack stack, int amount) {
         this.amount += amount;
         this.onCrafted(stack);
     }
 
+    @Override
     protected void onTake(int amount) {
         this.amount += amount;
     }
 
+    @Override
     protected void onCrafted(ItemStack stack) {
         if (this.amount > 0) {
             stack.onCraft(this.player.world, this.player, this.amount);
         }
 
         if (this.inventory instanceof RecipeUnlocker) {
-            ((RecipeUnlocker)this.inventory).unlockLastRecipe(this.player);
+            ((RecipeUnlocker) this.inventory).unlockLastRecipe(this.player);
         }
 
         this.amount = 0;
     }
 
+    @Override
     public void onTakeItem(PlayerEntity player, ItemStack stack) {
         this.onCrafted(stack);
 
@@ -64,7 +70,7 @@ public class MegaCraftingResultSlot extends Slot {
             defaultedList = player.world.getRecipeManager().getRemainingStacks(RecipeType.CRAFTING, this.input, player.world);
         }
 
-        for(int i = 0; i < defaultedList.size(); ++i) {
+        for (int i = 0; i < defaultedList.size(); ++i) {
             ItemStack itemStack = this.input.getStack(i);
             ItemStack itemStack2 = defaultedList.get(i);
             if (!itemStack.isEmpty()) {

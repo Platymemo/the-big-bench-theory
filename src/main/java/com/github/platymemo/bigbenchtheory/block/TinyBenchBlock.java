@@ -1,7 +1,6 @@
 package com.github.platymemo.bigbenchtheory.block;
 
 import com.github.platymemo.bigbenchtheory.screen.handlers.TinyCraftingScreenHandler;
-import com.github.platymemo.bigbenchtheory.util.BenchSize;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,7 +17,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
@@ -30,6 +28,8 @@ public class TinyBenchBlock extends Block {
         super(settings);
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
             return ActionResult.SUCCESS;
@@ -40,10 +40,14 @@ public class TinyBenchBlock extends Block {
         }
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
     public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
         return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> new TinyCraftingScreenHandler(i, playerInventory, ScreenHandlerContext.create(world, pos)), TITLE);
     }
