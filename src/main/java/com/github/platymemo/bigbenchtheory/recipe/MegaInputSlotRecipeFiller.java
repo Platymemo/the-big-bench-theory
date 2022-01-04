@@ -17,31 +17,6 @@ public class MegaInputSlotRecipeFiller<C extends Inventory> extends InputSlotFil
 
     @Override
     public void alignRecipeToGrid(int gridWidth, int gridHeight, int gridOutputSlot, Recipe<?> recipe, Iterator<Integer> inputs, int amount) {
-        int recipeWidth = gridWidth;
-        int recipeHeight = gridHeight;
-        if (recipe instanceof ShapedRecipe shapedRecipe) {
-            recipeWidth = shapedRecipe.getWidth();
-            recipeHeight = shapedRecipe.getHeight();
-        } else if (recipe instanceof MegaShapedRecipe shapedRecipe) {
-            recipeWidth = shapedRecipe.getWidth();
-            recipeHeight = shapedRecipe.getHeight();
-        }
-
-        int getTopSide = MathHelper.floor((gridHeight - recipeHeight) / 2.0D);
-        int getLeftSide = MathHelper.floor((gridWidth - recipeWidth) / 2.0D);
-
-        for (int currHeight = getTopSide; currHeight < gridHeight; ++currHeight) {
-            for (int currWidth = getLeftSide; currWidth < gridWidth; ++currWidth) {
-                if (!inputs.hasNext()) {
-                    return;
-                }
-
-                if (currWidth - getLeftSide >= recipeWidth) {
-                    break;
-                }
-
-                this.acceptAlignedInput(inputs, 1 + currWidth + (currHeight * this.handler.getCraftingWidth()), amount, currWidth, currHeight);
-            }
-        }
+        CraftingUtil.alignRecipeToGrid(this.handler, gridWidth, gridHeight, recipe, inputs, amount, this::acceptAlignedInput);
     }
 }
