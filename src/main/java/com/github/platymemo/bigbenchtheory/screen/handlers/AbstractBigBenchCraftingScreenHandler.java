@@ -1,5 +1,6 @@
 package com.github.platymemo.bigbenchtheory.screen.handlers;
 
+import com.github.platymemo.bigbenchtheory.inventory.Crafting3x3View;
 import com.github.platymemo.bigbenchtheory.recipe.MegaInputSlotRecipeFiller;
 import com.github.platymemo.bigbenchtheory.recipe.MegaRecipe;
 import com.github.platymemo.bigbenchtheory.registry.BigBenchTagRegistry;
@@ -27,6 +28,7 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -87,16 +89,19 @@ public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractReci
             ItemStack itemStack = ItemStack.EMPTY;
             Optional<MegaRecipe> optional = world.getServer().getRecipeManager().getFirstMatch(MegaRecipe.Type.INSTANCE, craftingInventory, world);
             if (optional.isPresent()) {
-                MegaRecipe megaRecipe = optional.get();
-                if (resultInventory.shouldCraftRecipe(world, serverPlayerEntity, megaRecipe)) {
-                    itemStack = megaRecipe.craft(craftingInventory);
+                MegaRecipe recipe = optional.get();
+                if (resultInventory.shouldCraftRecipe(world, serverPlayerEntity, recipe)) {
+                    itemStack = recipe.craft(craftingInventory);
                 }
             } else {
-                Optional<CraftingRecipe> optionalCraftingRecipe = world.getServer().getRecipeManager().getFirstMatch(RecipeType.CRAFTING, craftingInventory, world);
-                if (optionalCraftingRecipe.isPresent()) {
-                    CraftingRecipe craftingRecipe = optionalCraftingRecipe.get();
-                    if (resultInventory.shouldCraftRecipe(world, serverPlayerEntity, craftingRecipe)) {
-                        itemStack = craftingRecipe.craft(craftingInventory);
+                Optional<CraftingInventory> view = findAvailable3x3(craftingInventory);
+                if (view.isPresent()) {
+                    Optional<CraftingRecipe> optionalRecipe = world.getServer().getRecipeManager().getFirstMatch(RecipeType.CRAFTING, view.get(), world);
+                    if (optionalRecipe.isPresent()) {
+                        CraftingRecipe recipe = optionalRecipe.get();
+                        if (resultInventory.shouldCraftRecipe(world, serverPlayerEntity, recipe)) {
+                            itemStack = recipe.craft(craftingInventory);
+                        }
                     }
                 }
             }
@@ -104,6 +109,42 @@ public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractReci
             resultInventory.setStack(0, itemStack);
             serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(syncId, handler.nextRevision(), 0, itemStack));
         }
+    }
+
+    private static Optional<CraftingInventory> findAvailable3x3(CraftingInventory craftingInventory) {
+        int currWidth = 0;
+        int currHeight = 0;
+        int heightDiff = 0;
+        int x = -1;
+        int y = -1;
+        for (int i = 0; i < craftingInventory.getWidth(); ++i) {
+            int j = 0;
+            for (; j < craftingInventory.getHeight(); ++j) {
+                if (!craftingInventory.getStack(i + j * craftingInventory.getWidth()).isEmpty()) {
+                    if (x == -1 && y == -1) {
+                        x = i;
+                        y = j;
+                    } else if (j < y) {
+                        y = j;
+                    }
+                    currWidth++;
+                    currHeight = Math.max(currHeight, j - y);
+                }
+            }
+            if (currWidth > 3) {
+                return Optional.empty();
+            } else if (currHeight > 3) {
+                return Optional.empty();
+            }
+
+            currWidth = 0;
+        }
+
+        if (x == -1 && y == -1) {
+            return Optional.empty();
+        }
+
+        return Optional.of(Crafting3x3View.create(craftingInventory, x, y));
     }
 
     @SuppressWarnings("unchecked")
