@@ -7,7 +7,7 @@ import net.minecraft.recipe.RecipeMatcher;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
 
-public class FakeScreenHandler extends AbstractRecipeScreenHandler<Crafting3x3View> {
+public class FakeScreenHandler extends AbstractRecipeScreenHandler<CraftingView> {
     public FakeScreenHandler() {
         super(null, 0);
     }
@@ -23,7 +23,7 @@ public class FakeScreenHandler extends AbstractRecipeScreenHandler<Crafting3x3Vi
     }
 
     @Override
-    public boolean matches(Recipe<? super Crafting3x3View> recipe) {
+    public boolean matches(Recipe<? super CraftingView> recipe) {
         return false;
     }
 

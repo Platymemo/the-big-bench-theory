@@ -1,6 +1,6 @@
 package com.github.platymemo.bigbenchtheory.screen.handlers;
 
-import com.github.platymemo.bigbenchtheory.inventory.Crafting3x3View;
+import com.github.platymemo.bigbenchtheory.inventory.CraftingView;
 import com.github.platymemo.bigbenchtheory.recipe.MegaInputSlotRecipeFiller;
 import com.github.platymemo.bigbenchtheory.recipe.MegaRecipe;
 import com.github.platymemo.bigbenchtheory.registry.BigBenchTagRegistry;
@@ -28,8 +28,9 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractRecipeScreenHandler<CraftingInventory> {
@@ -94,7 +95,7 @@ public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractReci
                     itemStack = recipe.craft(craftingInventory);
                 }
             } else {
-                Optional<CraftingInventory> view = findAvailable3x3(craftingInventory);
+                Optional<CraftingInventory> view = findAvailableSmallGrid(craftingInventory);
                 if (view.isPresent()) {
                     Optional<CraftingRecipe> optionalRecipe = world.getServer().getRecipeManager().getFirstMatch(RecipeType.CRAFTING, view.get(), world);
                     if (optionalRecipe.isPresent()) {
@@ -111,40 +112,51 @@ public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractReci
         }
     }
 
-    private static Optional<CraftingInventory> findAvailable3x3(CraftingInventory craftingInventory) {
+    private static Optional<CraftingInventory> findAvailableSmallGrid(CraftingInventory craftingInventory) {
+        List<ItemStack> inputs = new ArrayList<>();
         int currWidth = 0;
         int currHeight = 0;
-        int heightDiff = 0;
-        int x = -1;
-        int y = -1;
+        int minX = -1;
+        int minY = -1;
         for (int i = 0; i < craftingInventory.getWidth(); ++i) {
             int j = 0;
             for (; j < craftingInventory.getHeight(); ++j) {
-                if (!craftingInventory.getStack(i + j * craftingInventory.getWidth()).isEmpty()) {
-                    if (x == -1 && y == -1) {
-                        x = i;
-                        y = j;
-                    } else if (j < y) {
-                        y = j;
+                ItemStack stack = craftingInventory.getStack(i + j * craftingInventory.getWidth());
+                if (!stack.isEmpty()) {
+                    // Initialize on first stack found
+                    if (minX == -1 && minY == -1) {
+                        minX = i;
+                        minY = j;
                     }
+
+                    // If a new column has a stack higher up, set it as the min
+                    minY = Math.min(minY, j);
+
+                    // Width
                     currWidth++;
-                    currHeight = Math.max(currHeight, j - y);
+
+                    // Height
+                    currHeight = Math.max(currHeight, j - minY);
+
+                    // Add stack to the list
+                    inputs.add(stack);
                 }
             }
-            if (currWidth > 3) {
-                return Optional.empty();
-            } else if (currHeight > 3) {
-                return Optional.empty();
-            }
 
-            currWidth = 0;
+            if (i < craftingInventory.getWidth() - 1) {
+                currWidth = 0;
+            }
         }
 
-        if (x == -1 && y == -1) {
+        if (minX == -1 && minY == -1) {
             return Optional.empty();
         }
 
-        return Optional.of(Crafting3x3View.create(craftingInventory, x, y));
+        if (currWidth <= 3 && currHeight <= 3) {
+            return Optional.of(CraftingView.create(craftingInventory, minX, minY));
+        }
+
+        return Optional.of(CraftingView.create(inputs));
     }
 
     @SuppressWarnings("unchecked")
