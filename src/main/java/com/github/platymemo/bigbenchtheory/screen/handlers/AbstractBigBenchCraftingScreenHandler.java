@@ -270,7 +270,6 @@ public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractReci
         return this.input.getHeight();
     }
 
-    @Environment(EnvType.CLIENT)
     @Override
     public int getCraftingSlotCount() {
         return this.input.size() + this.result.size();
