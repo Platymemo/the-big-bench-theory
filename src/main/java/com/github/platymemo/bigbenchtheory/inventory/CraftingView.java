@@ -6,15 +6,18 @@ import net.minecraft.item.ItemStack;
 import java.util.List;
 
 /**
- * Provides a 3x3 view into a larger CraftingInventory
+ * Provides a smaller view into a larger CraftingInventory
  */
 public class CraftingView extends CraftingInventory {
     private static final int SIZE = 3;
 
     public CraftingView(int width, int height) {
-        super(new FakeScreenHandler(), width, height);
+        super(new FakeScreenHandler(width, height), width, height);
     }
 
+    /**
+     * For shaped recipes
+     */
     public static CraftingView create(CraftingInventory from, int startX, int startY) {
         CraftingView view = new CraftingView(SIZE, SIZE);
 
@@ -28,8 +31,13 @@ public class CraftingView extends CraftingInventory {
         return view;
     }
 
+    /**
+     * For shapeless recipes
+     */
     public static CraftingView create(List<ItemStack> inputs) {
-        CraftingView view = new CraftingView(inputs.size(), 1);
+        // We shape the grid for maximum recipe compatibility
+        double sqrtSize = Math.sqrt(inputs.size());
+        CraftingView view = new CraftingView((int) sqrtSize + 1, (int) sqrtSize);
 
         for (int i = 0; i < inputs.size(); ++i) {
             view.setStack(i, inputs.get(i));

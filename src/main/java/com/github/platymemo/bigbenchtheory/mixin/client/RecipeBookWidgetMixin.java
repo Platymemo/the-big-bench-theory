@@ -22,6 +22,6 @@ public abstract class RecipeBookWidgetMixin extends DrawableHelper implements Dr
 
     @Override
     public void alignRecipeToGrid(int gridWidth, int gridHeight, int gridOutputSlot, Recipe<?> recipe, Iterator<Ingredient> inputs, int amount) {
-        CraftingUtil.alignRecipeToGrid(this.craftingScreenHandler, gridWidth, gridHeight, recipe, inputs, amount, this::acceptAlignedInput);
+        CraftingUtil.alignRecipeToGrid(gridWidth, gridHeight, gridOutputSlot, recipe, inputs, amount, this::acceptAlignedInput, RecipeGridAligner.super::alignRecipeToGrid);
     }
 }

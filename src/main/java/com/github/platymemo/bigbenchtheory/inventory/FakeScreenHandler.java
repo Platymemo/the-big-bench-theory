@@ -7,9 +7,17 @@ import net.minecraft.recipe.RecipeMatcher;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
 
+/**
+ * A dummy ScreenHandler that does nothing
+ */
 public class FakeScreenHandler extends AbstractRecipeScreenHandler<CraftingView> {
-    public FakeScreenHandler() {
+    private final int width;
+    private final int height;
+
+    public FakeScreenHandler(int width, int height) {
         super(null, 0);
+        this.width = width;
+        this.height = height;
     }
 
     @Override
@@ -34,12 +42,12 @@ public class FakeScreenHandler extends AbstractRecipeScreenHandler<CraftingView>
 
     @Override
     public int getCraftingWidth() {
-        return 3;
+        return width;
     }
 
     @Override
     public int getCraftingHeight() {
-        return 3;
+        return height;
     }
 
     @Override
