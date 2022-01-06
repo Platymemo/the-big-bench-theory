@@ -17,3 +17,6 @@
 ### v1.0.2
 1. Fixed KubeJS Compatibility (Again) \
    Thanks to liketechnik for the PR!
+
+### v1.0.3
+1. Fixed REI compatibility on servers
