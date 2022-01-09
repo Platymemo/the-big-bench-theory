@@ -13,6 +13,7 @@ import me.shedaniel.rei.api.common.plugins.REIServerPlugin;
 import me.shedaniel.rei.api.common.transfer.info.MenuInfoContext;
 import me.shedaniel.rei.api.common.transfer.info.MenuInfoRegistry;
 import me.shedaniel.rei.api.common.transfer.info.simple.RecipeBookGridMenuInfo;
+import me.shedaniel.rei.api.common.transfer.info.simple.SimpleMenuInfoProvider;
 import me.shedaniel.rei.plugin.common.BuiltinPlugin;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
 
@@ -30,14 +31,14 @@ public class MegaCraftingPlugin implements REIServerPlugin {
 
     @Override
     public void registerMenuInfo(MenuInfoRegistry registry) {
-        registry.register(BuiltinPlugin.CRAFTING, TinyCraftingScreenHandler.class, new MegaGridMenuInfo<>());
-        registry.register(BuiltinPlugin.CRAFTING, GreaterCraftingScreenHandler.class, new MegaGridMenuInfo<>());
-        registry.register(BuiltinPlugin.CRAFTING, MassiveCraftingScreenHandler.class, new MegaGridMenuInfo<>());
-        registry.register(BuiltinPlugin.CRAFTING, UltimateCraftingScreenHandler.class, new MegaGridMenuInfo<>());
-        registry.register(MEGA_CRAFTING, TinyCraftingScreenHandler.class, new RecipeBookGridMenuInfo<>());
-        registry.register(MEGA_CRAFTING, GreaterCraftingScreenHandler.class, new RecipeBookGridMenuInfo<>());
-        registry.register(MEGA_CRAFTING, MassiveCraftingScreenHandler.class, new RecipeBookGridMenuInfo<>());
-        registry.register(MEGA_CRAFTING, UltimateCraftingScreenHandler.class, new RecipeBookGridMenuInfo<>());
+        registry.register(BuiltinPlugin.CRAFTING, TinyCraftingScreenHandler.class, SimpleMenuInfoProvider.of(MegaGridMenuInfo::new));
+        registry.register(BuiltinPlugin.CRAFTING, GreaterCraftingScreenHandler.class, SimpleMenuInfoProvider.of(MegaGridMenuInfo::new));
+        registry.register(BuiltinPlugin.CRAFTING, MassiveCraftingScreenHandler.class, SimpleMenuInfoProvider.of(MegaGridMenuInfo::new));
+        registry.register(BuiltinPlugin.CRAFTING, UltimateCraftingScreenHandler.class, SimpleMenuInfoProvider.of(MegaGridMenuInfo::new));
+        registry.register(MEGA_CRAFTING, TinyCraftingScreenHandler.class, SimpleMenuInfoProvider.of(RecipeBookGridMenuInfo::new));
+        registry.register(MEGA_CRAFTING, GreaterCraftingScreenHandler.class, SimpleMenuInfoProvider.of(RecipeBookGridMenuInfo::new));
+        registry.register(MEGA_CRAFTING, MassiveCraftingScreenHandler.class, SimpleMenuInfoProvider.of(RecipeBookGridMenuInfo::new));
+        registry.register(MEGA_CRAFTING, UltimateCraftingScreenHandler.class, SimpleMenuInfoProvider.of(RecipeBookGridMenuInfo::new));
     }
 
     /**
@@ -45,16 +46,20 @@ public class MegaCraftingPlugin implements REIServerPlugin {
      */
     private static class MegaGridMenuInfo<T extends AbstractRecipeScreenHandler<?>, D extends SimpleGridMenuDisplay> extends RecipeBookGridMenuInfo<T, D> {
 
+        public MegaGridMenuInfo(D display) {
+            super(display);
+        }
+
         @Override
         public IntStream getInputStackSlotIds(MenuInfoContext<T, ?, D> context) {
             T menu = context.getMenu();
-            return getCenter3x3(getCraftingWidth(menu), getCraftingHeight(menu)).stream().mapToInt(Integer::intValue).filter(value -> value != getCraftingResultSlotIndex(context.getMenu()));
+            return getCenter3x3(getCraftingWidth(menu), getCraftingHeight(menu)).stream().mapToInt(Integer::intValue);
         }
 
         /**
          * Gets the integer values of the center 3x3 in a grid of the provided width and height
          */
-        private List<Integer> getCenter3x3(int width, int height) {
+        private static List<Integer> getCenter3x3(int width, int height) {
             int leftBound = (width - 3) / 2;
             int topBound = (height - 3) / 2;
             List<Integer> ints = new ArrayList<>();
