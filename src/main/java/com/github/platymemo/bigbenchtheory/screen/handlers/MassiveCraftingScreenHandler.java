@@ -1,7 +1,6 @@
 package com.github.platymemo.bigbenchtheory.screen.handlers;
 
 import com.github.platymemo.bigbenchtheory.registry.BigBenchScreenHandlerRegistry;
-import com.github.platymemo.bigbenchtheory.util.BenchSize;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandlerContext;
 
@@ -11,6 +10,21 @@ public class MassiveCraftingScreenHandler extends AbstractBigBenchCraftingScreen
     }
 
     public MassiveCraftingScreenHandler(int syncId, PlayerInventory playerInv, ScreenHandlerContext screenHandlerContext) {
-        super(syncId, BigBenchScreenHandlerRegistry.MASSIVE_CRAFTING, BenchSize.BIGGER, playerInv, screenHandlerContext);
+        super(syncId, BigBenchScreenHandlerRegistry.MASSIVE_CRAFTING, 7, playerInv, screenHandlerContext);
+    }
+
+    @Override
+    protected int getResultStartX() {
+        return 178;
+    }
+
+    @Override
+    protected int getInventoryStartX() {
+        return 26;
+    }
+
+    @Override
+    protected int getInventoryStartY() {
+        return 156;
     }
 }

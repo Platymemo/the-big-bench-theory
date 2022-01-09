@@ -5,8 +5,6 @@ import com.github.platymemo.bigbenchtheory.recipe.MegaInputSlotRecipeFiller;
 import com.github.platymemo.bigbenchtheory.recipe.MegaRecipe;
 import com.github.platymemo.bigbenchtheory.registry.BigBenchTagRegistry;
 import com.github.platymemo.bigbenchtheory.screen.MegaCraftingResultSlot;
-import com.github.platymemo.bigbenchtheory.util.BenchSize;
-import com.github.platymemo.bigbenchtheory.util.ScreenPlacementHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,41 +34,33 @@ import java.util.Optional;
 public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractRecipeScreenHandler<CraftingInventory> {
     public final ScreenHandlerContext context;
     public final PlayerEntity player;
-    private final int table_size;
+    private final int tableSize;
     private final CraftingInventory input;
     private final CraftingResultInventory result;
-    public ScreenPlacementHelper placementHelper;
 
-    public AbstractBigBenchCraftingScreenHandler(int syncId, ScreenHandlerType<?> screenHandlerType, BenchSize benchSize, PlayerInventory playerInventory, ScreenHandlerContext context) {
+    public AbstractBigBenchCraftingScreenHandler(int syncId, ScreenHandlerType<?> screenHandlerType, int size, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(screenHandlerType, syncId);
 
-        this.placementHelper = new ScreenPlacementHelper(benchSize);
+        tableSize = size;
 
-        {
-            if (benchSize == BenchSize.TINY) table_size = 1;
-            else if (benchSize == BenchSize.BIG) table_size = 5;
-            else if (benchSize == BenchSize.BIGGER) table_size = 7;
-            else table_size = 9;
-        }
-
-        this.input = new CraftingInventory(this, table_size, table_size);
+        this.input = new CraftingInventory(this, tableSize, tableSize);
         this.result = new CraftingResultInventory();
         this.context = context;
         this.player = playerInventory.player;
-        this.addSlot(new MegaCraftingResultSlot(playerInventory.player, this.input, this.result, 0, this.placementHelper.getResultStartX(), this.placementHelper.getResultStartY()));
+        this.addSlot(new MegaCraftingResultSlot(playerInventory.player, this.input, this.result, 0, this.getResultStartX(), this.getResultStartY()));
 
         int m;
         int n;
-        int k = this.placementHelper.getGridStartX();
-        int l = this.placementHelper.getGridStartY();
-        for (m = 0; m < table_size; ++m) {
-            for (n = 0; n < table_size; ++n) {
-                this.addSlot(new Slot(this.input, n + m * table_size, k + n * 18, l + m * 18));
+        int k = this.getGridStartX();
+        int l = this.getGridStartY();
+        for (m = 0; m < tableSize; ++m) {
+            for (n = 0; n < tableSize; ++n) {
+                this.addSlot(new Slot(this.input, n + m * tableSize, k + n * 18, l + m * 18));
             }
         }
 
-        k = this.placementHelper.getInventoryStartX();
-        l = this.placementHelper.getInventoryStartY();
+        k = this.getInventoryStartX();
+        l = this.getInventoryStartY();
         for (m = 0; m < 3; ++m) {
             for (n = 0; n < 9; ++n) {
                 this.addSlot(new Slot(playerInventory, n + m * 9 + 9, k + n * 18, l + m * 18));
@@ -81,6 +71,30 @@ public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractReci
             this.addSlot(new Slot(playerInventory, m, k + m * 18, l + 58));
         }
 
+    }
+
+    protected int getGridStartX() {
+        return 12;
+    }
+
+    protected int getGridStartY() {
+        return 14;
+    }
+
+    protected int getResultStartX() {
+        return 115;
+    }
+
+    protected int getResultStartY() {
+        return 68;
+    }
+
+    protected int getInventoryStartX() {
+        return 8;
+    }
+
+    protected int getInventoryStartY() {
+        return 84;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -199,7 +213,7 @@ public abstract class AbstractBigBenchCraftingScreenHandler extends AbstractReci
 
     @Override
     public ItemStack transferSlot(PlayerEntity player, int index) {
-        int size = table_size * table_size;
+        int size = tableSize * tableSize;
         ItemStack tempStack = ItemStack.EMPTY;
         Slot targetSlot = this.slots.get(index);
         if (targetSlot.hasStack()) {
